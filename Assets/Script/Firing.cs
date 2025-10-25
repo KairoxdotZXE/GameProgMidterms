@@ -14,7 +14,7 @@ public class Firing : MonoBehaviour
     public MeshRenderer rend1, rend2, bulletRend;
     private Color[] ColorSwap = new Color[3];
     private String[] colors = new string[3] { "red", "green", "blue" };
-    public int colorIndex = 0;
+    private int colorIndex = 0;
     void Start()
     {
         ColorSwap[0] = Color.red;
@@ -30,9 +30,10 @@ public class Firing : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("Key Pressed");
+            
 
             ChangeColor();
+            Debug.Log("colorIndex is " +  colorIndex);
             colorIndex++;
             
         }
@@ -55,9 +56,8 @@ public class Firing : MonoBehaviour
             rend2.material.color = ColorSwap[colorIndex];
             bulletRend.sharedMaterial.color = ColorSwap[colorIndex];
         }
-        
-
+        GameManager.instance.GetBulletColor(colorIndex);
     }
 
-    IEnumerator Shoot(){ yield return new WaitForSeconds(1f); Debug.Log("Shooting"); Instantiate(Bullet, BulletSpawn.position, transform.rotation);StartCoroutine(Shoot()); }
+    IEnumerator Shoot(){ yield return new WaitForSeconds(1f); /*Debug.Log("Shooting");*/ Instantiate(Bullet, BulletSpawn.position, transform.rotation);StartCoroutine(Shoot()); }
 }

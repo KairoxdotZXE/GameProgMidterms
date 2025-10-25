@@ -12,7 +12,7 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnRates());
     }
 
-    IEnumerator SpawnRates() { yield return new WaitForSeconds(3f); Instantiate(WhatTypeofEnemy(), RandomizeSpawn(), Quaternion.identity); StartCoroutine(SpawnRates()); }
+    IEnumerator SpawnRates() { yield return new WaitForSeconds(3f);Debug.Log("Spawning"); Instantiate(WhatTypeofEnemy(), RandomizeSpawn(), Quaternion.identity); StartCoroutine(SpawnRates()); }
     GameObject WhatTypeofEnemy()
     {
         GameObject toSummon = null;
@@ -31,22 +31,42 @@ public class SpawnManager : MonoBehaviour
         }
         return toSummon;
     }
-    private Vector3 RandomizeSpawn()
+private Vector3 RandomizeSpawn()
+{
+    float minX = Mathf.Min(bottomLeftCornerMin.position.x, upperLeftCornerMin.position.x);
+    float maxX = Mathf.Max(bottomRightCornerMax.position.x, upperRightCornerMax.position.x);
+    float minZ = Mathf.Min(bottomLeftCornerMin.position.z, bottomRightCornerMin.position.z);
+    float maxZ = Mathf.Max(upperLeftCornerMax.position.z, upperRightCornerMax.position.z);
+
+    int edge = Random.Range(0, 4);
+
+    float spawnX = 0f;
+    float spawnZ = 0f;
+
+    switch (edge)
     {
-        // Determine the min and max X and Z values based on your corner transforms
-        float minX = Mathf.Min(bottomLeftCornerMin.position.x, upperLeftCornerMin.position.x);
-        float maxX = Mathf.Max(bottomRightCornerMax.position.x, upperRightCornerMax.position.x);
-
-        float minZ = Mathf.Min(bottomLeftCornerMin.position.z, bottomRightCornerMin.position.z);
-        float maxZ = Mathf.Max(upperLeftCornerMax.position.z, upperRightCornerMax.position.z);
-
-        // Randomize X and Z within those ranges
-        float randomX = Random.Range(minX, maxX);
-        float randomZ = Random.Range(minZ, maxZ);
-
-        // You can pick a Y value from one of your corners (or also randomize between min/max Y)
-        float y = Random.Range(bottomLeftCornerMin.position.y, upperLeftCornerMax.position.y);
-
-        return new Vector3(randomX, y, randomZ);
+        case 0: // left
+            spawnX = minX - 2f;
+            spawnZ = Random.Range(minZ, maxZ);
+            break;
+        case 1: // right
+            spawnX = maxX + 2f;
+            spawnZ = Random.Range(minZ, maxZ);
+            break;
+        case 2: // top
+            spawnZ = maxZ + 2f;
+            spawnX = Random.Range(minX, maxX);
+            break;
+        case 3: // bottom
+            spawnZ = minZ - 2f;
+            spawnX = Random.Range(minX, maxX);
+            break;
     }
+
+    // Keep Y consistent (same as your prefab or ground level)
+    float y = rType.transform.position.y; // or just 0f if your scene is flat
+
+    return new Vector3(spawnX, y, spawnZ);
+}
+
 }

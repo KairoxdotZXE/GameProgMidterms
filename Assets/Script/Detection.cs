@@ -4,7 +4,7 @@ public class Detection : MonoBehaviour
 {
     [Header("Targeting")]
     public string targetTag = "Enemy";    // Tag of objects to detect
-    public float detectionRadius = 100f;   // How far we can see targets
+    private float detectionRadius = 10f;   // How far we can see targets
 
     [Header("Rotation")]
     public float rotationSpeed = 5f;      // How fast the shooter rotates
@@ -78,7 +78,7 @@ public class Detection : MonoBehaviour
         nearestTarget = currentNearest;
     }
 
-    void OnDrawGizmosSelected()
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);

@@ -2,15 +2,26 @@ using UnityEngine;
 
 public class rType : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private int index = 0;
+    void OnTriggerEnter(Collider other)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log("Enemy Got Shot");
+        if (other.CompareTag("Bullet"))
+        {
+            if (GameManager.instance.ColorsMatch(index))
+            {
+                //Dies
+                Destroy(other.gameObject);
+                GameManager.instance.IncreaseKills();
+                Destroy(gameObject);
+            }
+            else
+                Destroy(other.gameObject);
+        }
+                if (other.CompareTag("Player"))
+        {
+            GameManager.instance.TakeDamage();
+            Destroy(gameObject);
+        }
     }
 }

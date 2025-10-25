@@ -13,8 +13,5 @@ public class BulletScript : MonoBehaviour
     {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
-    void OnTriggerEnter(Collider other) { if (other.CompareTag("Player")) { } }
-    
-    void Damage(){}
     IEnumerator DeSpawn(){ yield return new WaitForSeconds(10f); Destroy(gameObject);}
 }
